@@ -8,13 +8,13 @@ def stream_users_in_batches(batch_size):
     try:
         cursor.execute("SELECT user_id, name, email, age FROM user_data")
         batch = []
-        for row in cursor:  #type: ignore
+        for row in cursor:  # type: ignore
             batch.append(row)
             if len(batch) == batch_size:
                 yield batch
                 batch = []
         if batch:
-            yield batch
+            return batch
     finally:
         cursor.close()
         conn.close()

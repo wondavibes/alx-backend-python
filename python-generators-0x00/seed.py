@@ -44,7 +44,7 @@ def create_database(connection):
 def connect_to_prodev(host=None, user=None, password="Dhammy14", port=None):
     """Connect to the ALX_prodev database. Creates the database if needed."""
     # Connect to server first
-    conn = connect_db(host=host, user=user, password=password, port=port)
+    conn = connect_db(host=host, user=user, password="Dhammy14", port=port)
     try:
         create_database(conn)
     finally:
