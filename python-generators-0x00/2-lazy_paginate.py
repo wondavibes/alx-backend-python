@@ -4,7 +4,7 @@ def paginate_users(page_size, offset):
     cursor = conn.cursor(dictionary=True)
     try:
         cursor.execute(
-            "SELECT user_id, name, email, age FROM user_data LIMIT %s OFFSET %s",
+            "SELECT * FROM user_data LIMIT %s OFFSET %s",
             (page_size, offset),
         )
         return cursor.fetchall()
