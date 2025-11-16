@@ -66,6 +66,6 @@ class TestMemoize(unittest.TestCase):
             self.assertEqual(obj.a_property, 42)
             mock_method.assert_called_once()
 
-            # Second access should return cached value, not call a_method again
+            # Second access should return cached value,not call a_method again
             self.assertEqual(obj.a_property, 42)
             mock_method.assert_called_once()
