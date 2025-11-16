@@ -5,6 +5,8 @@ import unittest
 from unittest.mock import patch
 from parameterized import parameterized  # type: ignore
 from client import GithubOrgClient
+from parameterized import parameterized_class
+from fixtures import org_payload, repos_payload, expected_repos, apache2_repos
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -125,3 +127,73 @@ class TestGithubOrgClient(unittest.TestCase):
             The expected boolean result of the check.
         """
         self.assertEqual(GithubOrgClient.has_license(repo, license_key), expected)
+
+
+@parameterized_class(
+    [
+        {
+            "org_payload": org_payload,
+            "repos_payload": repos_payload,
+            "expected_repos": expected_repos,
+            "apache2_repos": apache2_repos,
+        }
+    ]
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """
+    Integration tests for GithubOrgClient.public_repos.
+
+    These tests mock only the external HTTP requests (requests.get),
+    while allowing the rest of the client logic to execute normally.
+    The fixtures provide example payloads for organizations and repos.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        Set up the integration test environment.
+
+        This method patches requests.get so that no real HTTP calls
+        are made. The side_effect ensures that calling .json() on the
+        mocked response returns the appropriate fixture payloads
+        depending on the requested URL.
+        """
+        cls.get_patcher = patch("client.requests.get")
+
+        def side_effect(url):
+            mock_response = Mock()
+            if url == GithubOrgClient.ORG_URL.format(org="google"):
+                mock_response.json.return_value = cls.org_payload
+            elif url == cls.org_payload["repos_url"]:
+                mock_response.json.return_value = cls.repos_payload
+            else:
+                mock_response.json.return_value = {}
+            return mock_response
+
+        cls.mock_get = cls.get_patcher.start()
+        cls.mock_get.side_effect = side_effect
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Tear down the integration test environment.
+
+        This method stops the patcher so that requests.get is restored
+        to its original behavior after the tests complete.
+        """
+        cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """
+        Test that public_repos returns the expected list of repo names
+        based on the mocked fixtures.
+        """
+        client = GithubOrgClient("google")
+        self.assertEqual(client.public_repos(), self.expected_repos)
+
+    def test_public_repos_with_license(self):
+        """
+        Test that public_repos correctly filters repos by license key.
+        """
+        client = GithubOrgClient("google")
+        self.assertEqual(client.public_repos("apache-2.0"), self.apache2_repos)
