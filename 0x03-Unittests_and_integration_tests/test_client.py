@@ -43,9 +43,7 @@ class TestGithubOrgClient(unittest.TestCase):
         A mock object replacing get_json prevents real HTTP calls.
         """
         name = f"https://api.github.com/orgs/{org_name}/repos"
-        expected = {"repos_url": 
-            name
-        }
+        expected = {"repos_url": name}
         mock_get_json.return_value = expected
 
         client = GithubOrgClient(org_name)
@@ -69,7 +67,6 @@ class TestGithubOrgClient(unittest.TestCase):
         with patch.object(GithubOrgClient, "org", payload):
             self.assertEqual(client._public_repos_url, 
                              "http://example.com/repos")
-
     @patch("client.get_json")
     def test_public_repos(self, mock_get_json):
         """
