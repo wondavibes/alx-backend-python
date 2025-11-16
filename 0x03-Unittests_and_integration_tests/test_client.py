@@ -38,17 +38,21 @@ class TestGithubOrgClient(unittest.TestCase):
         Parameters
         ----------
         org_name : str
-            The name of the GitHub organization to test (e.g., "google", "abc").
+        the name of the GitHub organization to test (e.g., "google", "abc")
         mock_get_json : unittest.mock.Mock
-            A mock object replacing the get_json function to prevent real HTTP calls.
+        A mock object replacing get_json prevents real HTTP calls.
         """
-        expected = {"repos_url": f"https://api.github.com/orgs/{org_name}/repos"}
+        name = f"https://api.github.com/orgs/{org_name}/repos"
+        expected = {"repos_url": 
+            name
+        }
         mock_get_json.return_value = expected
 
         client = GithubOrgClient(org_name)
         self.assertEqual(client.org, expected)
-
-        mock_get_json.assert_called_once_with(f"https://api.github.com/orgs/{org_name}")
+        mock_get_json.assert_called_once_with(
+            f"https://api.github.com/orgs/{org_name}"
+            )
 
     def test_public_repos_url(self):
         """
@@ -63,7 +67,8 @@ class TestGithubOrgClient(unittest.TestCase):
 
         # Patch the org property to return the payload
         with patch.object(GithubOrgClient, "org", payload):
-            self.assertEqual(client._public_repos_url, "http://example.com/repos")
+            self.assertEqual(client._public_repos_url, 
+                             "http://example.com/repos")
 
     @patch("client.get_json")
     def test_public_repos(self, mock_get_json):
