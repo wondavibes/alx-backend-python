@@ -4,9 +4,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import Conversation, Message, User
 from .serializers import ConversationSerializer, MessageSerializer
+from rest_framework import filters
 
 
-class ConversationViewSet(viewsets.ModelViewSet):
+"""class ConversationViewSet(viewsets.ModelViewSet):
     queryset = Conversation.objects.all()
     serializer_class = ConversationSerializer
 
@@ -28,7 +29,15 @@ class ConversationViewSet(viewsets.ModelViewSet):
         conversation = Conversation.objects.create()
         conversation.participants.set(participants)
         serializer = self.get_serializer(conversation)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)"""
+
+
+class ConversationViewSet(viewsets.ModelViewSet):
+    queryset = Conversation.objects.all()
+    serializer_class = ConversationSerializer
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ["participants__email"]
+    ordering_fields = ["created_at"]
 
 
 class MessageViewSet(viewsets.ModelViewSet):
