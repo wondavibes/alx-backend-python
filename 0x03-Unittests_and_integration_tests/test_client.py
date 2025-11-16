@@ -48,9 +48,7 @@ class TestGithubOrgClient(unittest.TestCase):
 
         client = GithubOrgClient(org_name)
         self.assertEqual(client.org, expected)
-        mock_get_json.assert_called_once_with(
-            f"https://api.github.com/orgs/{org_name}"
-            )
+        mock_get_json.assert_called_once_with(f"https://api.github.com/orgs/{org_name}")
 
     def test_public_repos_url(self):
         """
@@ -102,3 +100,28 @@ class TestGithubOrgClient(unittest.TestCase):
 
         # Ensure the property and get_json were called once
         mock_get_json.assert_called_once_with("http://example.com/repos")
+
+    @parameterized.expand(
+        [
+            ({"license": {"key": "my_license"}}, "my_license", True),
+            ({"license": {"key": "other_license"}}, "my_license", False),
+        ]
+    )
+    def test_has_license(self, repo, license_key, expected):
+        """
+        Unit-test GithubOrgClient.has_license.
+
+        This test verifies that the static method correctly determines
+        whether a given repository dictionary contains the specified
+        license key.
+
+        Parameters
+        ----------
+        repo : dict
+            A repository dictionary containing a license key.
+        license_key : str
+            The license key to check for.
+        expected : bool
+            The expected boolean result of the check.
+        """
+        self.assertEqual(GithubOrgClient.has_license(repo, license_key), expected)
