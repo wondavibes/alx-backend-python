@@ -10,7 +10,18 @@ from utils import access_nested_map, memoize
 class TestAccessNestedMap(unittest.TestCase):
     """TestAccessNestedMap class to test access_nested_map function
     from the utils module. It uses parameterized
-    to test multiple inputs and expected outputs."""
+    to test multiple inputs and expected outputs.
+
+    Test Methods
+    test_access_nested_map(self, nested_map, path, expected)
+    This test method is decorated with @parameterized.expand and is executed
+    multiple times with different input parameters.
+    - Parameters:
+        - nested_map: A dictionary representing the nested map to be
+        accessed.
+        - path: A tuple representing the keys to access the nested map.
+        - expected: The expected value to be returned by access_nested_map.
+    """
 
     @parameterized.expand(
         [
@@ -35,8 +46,31 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
-    """TestGetJson class to test get_json function from the utils module.
-    It uses parameterized to test many URLs and expected JSON responses."""
+    """The TestGetJson class contains a series
+        of test methods that validate the behavior of the get_json function.
+
+    Test Methods
+
+    test_get_json(self, url, expected_json)
+    This test method is decorated with @parameterized.expand and is executed
+    multiple times with different input parameters.
+
+    - Parameters:
+        - url: The URL to be tested.
+        - expected_json: The expected JSON response from the get_json function.
+    - Purpose:
+        - To test the get_json function with various URLs and
+        verify that it returns the expected JSON responses.
+    - Test Logic:
+        1. Call the get_json function with the provided url.
+        2. Compare the returned JSON response with the expected_json.
+        3. Assert that the two JSON responses are equal using self.assertEqual.
+
+    Example Usage
+
+    To use the TestGetJson class, you can create an instance of the class
+    and run the test methods using the unittest framework.
+    """
 
     @parameterized.expand(
         [
