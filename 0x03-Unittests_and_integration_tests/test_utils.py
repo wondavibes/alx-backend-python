@@ -8,7 +8,8 @@ from utils import access_nested_map, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    """TestAccessNestedMap class to test access_nested_map function from the utils module. It uses parameterized
+    """TestAccessNestedMap class to test access_nested_map function
+    from the utils module. It uses parameterized
     to test multiple inputs and expected outputs."""
 
     @parameterized.expand(
