@@ -1,8 +1,10 @@
 from rest_framework import serializers
-from .models import User, Message, Conversation
+from .models import User, Conversation, Message
 
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
@@ -13,17 +15,22 @@ class UserSerializer(serializers.ModelSerializer):
             "phone_number",
             "role",
             "created_at",
+            "full_name",
         ]
+
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender = UserSerializer(read_only=True)
+    sender_email = serializers.CharField(source="sender.email", read_only=True)
 
     class Meta:
         model = Message
         fields = [
             "message_id",
             "sender",
+            "sender_email",
             "conversation",
             "message_body",
             "sent_at",
@@ -42,3 +49,10 @@ class ConversationSerializer(serializers.ModelSerializer):
             "created_at",
             "messages",
         ]
+
+    def validate(self, attrs):
+        if not attrs.get("participants"):
+            raise serializers.ValidationError(
+                "Conversation must include at least one participant."
+            )
+        return attrs
