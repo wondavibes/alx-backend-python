@@ -8,7 +8,8 @@ from utils import access_nested_map, memoize
 
 
 class TestAccessNestedMap(unittest.TestCase):
-    """TestAccessNestedMap class to test access_nested_map function"""
+    """TestAccessNestedMap class to test access_nested_map function from the utils module. It uses parameterized
+    to test multiple inputs and expected outputs."""
 
     @parameterized.expand(
         [
@@ -33,7 +34,8 @@ class TestAccessNestedMap(unittest.TestCase):
 
 
 class TestGetJson(unittest.TestCase):
-    """TestGetJson class to test get_json function"""
+    """TestGetJson class to test get_json function from the utils module.
+    It uses parameterized to test many URLs and expected JSON responses."""
 
     @parameterized.expand(
         [
@@ -52,7 +54,8 @@ class TestGetJson(unittest.TestCase):
 
 
 class TestMemoize(unittest.TestCase):
-    """TestMemoize class to test memoize decorator"""
+    """TestMemoize class to test memoize decorator from the utils module,
+    ensuring the decorated method is called once and the result is cached."""
 
     def test_memoize(self):
         class TestClass:
