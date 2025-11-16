@@ -65,8 +65,8 @@ class TestGithubOrgClient(unittest.TestCase):
 
         # Patch the org property to return the payload
         with patch.object(GithubOrgClient, "org", payload):
-            self.assertEqual(client._public_repos_url,"http://eg.com/repos")
-            
+            self.assertEqual(client._public_repos_url, "http://eg.com/repos")
+
     @patch("client.get_json")
     def test_public_repos(self, mock_get_json):
         """
