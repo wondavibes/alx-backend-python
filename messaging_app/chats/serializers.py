@@ -3,7 +3,7 @@ from .models import User, Conversation, Message
 
 
 class UserSerializer(serializers.ModelSerializer):
-    full_name = serializers.SerializerMethodField()
+    full_name = serializers.SerializerMethodField(source="User.first_name")
 
     class Meta:
         model = User
